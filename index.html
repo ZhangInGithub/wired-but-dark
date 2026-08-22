@@ -1,0 +1,470 @@
+<title>Wired but Dark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@500;600&display=swap">
+
+<style>
+  :root {
+    --paper:#E9EDEC; --surface:#FAFCFB; --surface-2:#F1F4F3;
+    --ink:#131C1B; --ink-soft:#37403E; --slate:#5C6A67; --line:#CDD6D3;
+    --signal:#067A80; --signal-strong:#045A5E; --break:#AE4630;
+    --signal-wash:rgba(6,122,128,.08); --break-wash:rgba(174,70,48,.09);
+    --shadow:0 1px 2px rgba(19,28,27,.04), 0 8px 30px rgba(19,28,27,.06);
+    --fs-display:clamp(2.55rem,6vw,4.25rem);
+    --fs-h2:clamp(1.55rem,3.3vw,2.2rem);
+    --fs-body:1.0625rem;
+    --measure:68ch;
+    --disp:"Archivo",system-ui,sans-serif;
+    --body:"Newsreader",Georgia,serif;
+    --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0C1211; --surface:#121A19; --surface-2:#172120;
+      --ink:#EAF0EE; --ink-soft:#C4CFCC; --slate:#8A9995; --line:#26302E;
+      --signal:#33AEB4; --signal-strong:#5FCBD0; --break:#DE7E62;
+      --signal-wash:rgba(51,174,180,.12); --break-wash:rgba(222,126,98,.13);
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0C1211; --surface:#121A19; --surface-2:#172120;
+    --ink:#EAF0EE; --ink-soft:#C4CFCC; --slate:#8A9995; --line:#26302E;
+    --signal:#33AEB4; --signal-strong:#5FCBD0; --break:#DE7E62;
+    --signal-wash:rgba(51,174,180,.12); --break-wash:rgba(222,126,98,.13);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink-soft);
+    font-family:var(--body); font-size:var(--fs-body); line-height:1.66;
+    font-optical-sizing:auto;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 clamp(20px,5vw,64px)}
+  .col{max-width:var(--measure)}
+
+  /* ---- type ---- */
+  h1,h2,h3{font-family:var(--disp); color:var(--ink); line-height:1.06;
+    text-wrap:balance; font-weight:800; letter-spacing:-.015em; margin:0}
+  h2{font-size:var(--fs-h2); font-weight:700; letter-spacing:-.01em}
+  h3{font-size:1.28rem; font-weight:700; letter-spacing:-.005em}
+  p{margin:0 0 1.05em}
+  a{color:var(--signal-strong); text-underline-offset:3px; text-decoration-thickness:1px}
+  strong{color:var(--ink); font-weight:500}
+  em{color:var(--ink)}
+
+  .eyebrow{font-family:var(--mono); font-size:.72rem; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--signal-strong);
+    display:inline-flex; align-items:center; gap:.6em}
+  .eyebrow::before{content:""; width:26px; height:1px; background:var(--signal); display:inline-block}
+
+  code,.mono{font-family:var(--mono); font-size:.86em; font-weight:500}
+  p code, li code{background:var(--surface-2); border:1px solid var(--line);
+    padding:.08em .38em; border-radius:4px; color:var(--ink); white-space:nowrap}
+
+  /* ---- header ---- */
+  header{padding:clamp(56px,9vw,120px) 0 clamp(30px,4vw,48px)}
+  .topbar{display:flex; justify-content:space-between; align-items:center;
+    padding-top:22px; gap:16px}
+  .mark{font-family:var(--mono); font-size:.74rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--slate)}
+  .mark b{color:var(--ink); font-weight:600}
+  .theme-btn{font-family:var(--mono); font-size:.7rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--slate); background:transparent;
+    border:1px solid var(--line); border-radius:999px; padding:.5em 1em;
+    cursor:pointer; transition:border-color .2s, color .2s}
+  .theme-btn:hover{border-color:var(--signal); color:var(--ink)}
+  .theme-btn:focus-visible{outline:2px solid var(--signal); outline-offset:2px}
+
+  h1{font-size:var(--fs-display); margin:.5em 0 0}
+  .deck{font-size:clamp(1.12rem,2.2vw,1.4rem); color:var(--ink-soft);
+    max-width:34ch; margin:.9em 0 0; line-height:1.45}
+  .deck em{color:var(--signal-strong); font-style:italic}
+  .meta{font-family:var(--mono); font-size:.74rem; color:var(--slate);
+    letter-spacing:.04em; margin-top:2.4em; display:flex; flex-wrap:wrap; gap:.5em 1.4em}
+  .meta span{white-space:nowrap}
+
+  .traceline{width:100%; height:34px; margin-top:34px; display:block; color:var(--line)}
+
+  /* ---- sections ---- */
+  section{padding:clamp(38px,6vw,72px) 0}
+  section + section{border-top:1px solid var(--line)}
+  .lede{font-size:clamp(1.12rem,1.8vw,1.32rem); line-height:1.5; color:var(--ink);
+    font-weight:400}
+  .lede.first::first-letter{font-family:var(--disp); font-weight:800; float:left;
+    font-size:3.1em; line-height:.72; padding:.06em .12em 0 0; color:var(--signal-strong)}
+
+  /* trap header */
+  .trap-head{display:flex; align-items:baseline; gap:18px; margin-bottom:1.5em}
+  .trap-num{font-family:var(--mono); font-size:.9rem; font-weight:600;
+    color:var(--break); letter-spacing:.06em; padding-top:.3em}
+  .trap-head h2 .sub{display:block; font-family:var(--body); font-weight:400;
+    font-size:.62em; color:var(--slate); letter-spacing:0; margin-top:.35em;
+    font-style:italic}
+
+  .chip{display:inline-block; font-family:var(--mono); font-size:.68rem;
+    letter-spacing:.08em; text-transform:uppercase; padding:.32em .7em; border-radius:5px;
+    border:1px solid; font-weight:600; vertical-align:middle}
+  .chip.crit{color:var(--break); border-color:var(--break); background:var(--break-wash)}
+  .chip.ok{color:var(--signal-strong); border-color:var(--signal); background:var(--signal-wash)}
+
+  /* figures */
+  figure{margin:2.2em 0; padding:0}
+  .fig-card{background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    padding:clamp(18px,3vw,30px); box-shadow:var(--shadow)}
+  figure svg{width:100%; height:auto; display:block; color:var(--slate)}
+  figcaption{font-size:.92rem; color:var(--slate); margin-top:1em; line-height:1.5;
+    font-style:italic; max-width:60ch}
+  figcaption b{color:var(--ink); font-weight:500; font-style:normal}
+
+  /* callout */
+  .callout{border-left:3px solid var(--signal); background:var(--signal-wash);
+    padding:1.1em 1.3em; border-radius:0 8px 8px 0; margin:1.8em 0; font-size:1rem}
+  .callout .eyebrow{margin-bottom:.5em}
+  .callout p:last-child{margin-bottom:0}
+
+  /* table */
+  .table-region{margin-top:2em}
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow); background:var(--surface)}
+  table{border-collapse:collapse; width:100%; min-width:720px; font-size:.94rem}
+  th,td{text-align:left; padding:.85em 1.1em; border-bottom:1px solid var(--line);
+    vertical-align:top}
+  thead th{font-family:var(--mono); font-size:.7rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--slate); font-weight:600;
+    background:var(--surface-2); position:sticky; top:0}
+  tbody th{font-family:var(--disp); font-weight:700; color:var(--ink); font-size:.98rem;
+    white-space:nowrap}
+  tbody tr:last-child td, tbody tr:last-child th{border-bottom:none}
+  td .num{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink)}
+  .tag{font-family:var(--mono); font-size:.66rem; letter-spacing:.05em; padding:.2em .5em;
+    border-radius:4px; background:var(--surface-2); border:1px solid var(--line);
+    color:var(--slate); white-space:nowrap; text-transform:uppercase}
+  .tag.warn{color:var(--break); border-color:var(--break); background:var(--break-wash)}
+  .tag.pick{color:var(--signal-strong); border-color:var(--signal); background:var(--signal-wash)}
+  .row-note{font-size:.9rem; color:var(--ink-soft)}
+
+  /* checklist */
+  .checks{list-style:none; padding:0; margin:1.6em 0 0; display:grid; gap:14px}
+  .checks li{background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:1.05em 1.2em 1.05em 3.1em; position:relative; box-shadow:var(--shadow)}
+  .checks li::before{content:""; position:absolute; left:1.15em; top:1.35em;
+    width:14px; height:14px; border:2px solid var(--signal); border-radius:4px}
+  .checks li::after{content:""; position:absolute; left:1.42em; top:1.4em;
+    width:5px; height:9px; border:solid var(--signal); border-width:0 2px 2px 0;
+    transform:rotate(42deg)}
+  .checks b{font-family:var(--disp); color:var(--ink); font-weight:700; font-size:.98rem;
+    display:block; margin-bottom:.2em; letter-spacing:-.005em}
+  .checks span{font-size:.96rem}
+
+  footer{padding:44px 0 70px; border-top:1px solid var(--line); color:var(--slate);
+    font-family:var(--mono); font-size:.74rem; letter-spacing:.03em; line-height:1.7}
+  footer b{color:var(--ink)}
+
+  .diagram-grid{color:var(--slate)}
+  .lbl{font-family:var(--mono); font-weight:600}
+
+  @media (max-width:620px){
+    .trap-head{flex-direction:column; gap:6px}
+    .trap-num{padding-top:0}
+    .meta{gap:.4em 1em}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .draw{stroke-dasharray:var(--len,300); stroke-dashoffset:var(--len,300);
+      animation:draw 1.4s .3s ease forwards}
+    @keyframes draw{to{stroke-dashoffset:0}}
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="topbar">
+      <div class="mark"><b>Field Notes</b> &nbsp;/&nbsp; Agent Infrastructure</div>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch color theme">Theme</button>
+    </div>
+
+    <p class="eyebrow" style="margin-top:2.6em">The POC-to-production gap</p>
+    <h1>Wired but Dark</h1>
+    <p class="deck">Two failure modes that pass every demo and quietly die in production — in the harnesses we build to drive <em>small open models</em>.</p>
+
+    <div class="meta">
+      <span>Retrospective · self-built harness audit</span>
+      <span>Aug 2026</span>
+      <span>Read time ~7 min</span>
+    </div>
+
+    <!-- header motif: a signal trace that looks continuous but carries a gap -->
+    <svg class="traceline" viewBox="0 0 1000 34" role="img" aria-label="A signal trace running left to right, broken by a gap in the middle before resuming">
+      <line x1="0" y1="17" x2="470" y2="17" stroke="var(--signal)" stroke-width="2" class="draw" style="--len:470"/>
+      <circle cx="470" cy="17" r="3.5" fill="var(--break)"/>
+      <circle cx="560" cy="17" r="3.5" fill="var(--break)"/>
+      <line x1="470" y1="17" x2="560" y2="17" stroke="var(--break)" stroke-width="2" stroke-dasharray="3 5"/>
+      <line x1="560" y1="17" x2="1000" y2="17" stroke="var(--signal)" stroke-width="2" opacity=".5"/>
+    </svg>
+  </header>
+
+  <section>
+    <div class="col">
+      <p class="lede first">The most expensive bugs in an agent stack aren't the ones that crash. They're the ones that return a plausible value — an empty list, a well-formed string — and let everything downstream keep running as if the system worked. The harness passes its demo, ships, and only reveals the hole under real traffic, months later, as "the agent feels like it has no memory" or "tools work, except when they don't."</p>
+      <p>I audited a production harness built to orchestrate a 14B-parameter open model across a fleet of specialist sub-agents. On paper it had everything: persistent context, a tool layer, a supervisor router. Two of those pillars were hollow — not missing, <em>hollow</em>. The scaffolding around them was complete enough that no one noticed. Here are both, generalized to the pattern, because if you've built a harness around a small model you have probably shipped at least one of them.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="trap-head">
+        <div class="trap-num">TRAP 01</div>
+        <h2>The wired stub
+          <span class="sub">memory that saves perfectly and reads back nothing</span>
+        </h2>
+      </div>
+
+      <p>The harness had a real persistence layer. Context was written to a store on every turn — with append semantics, version-conflict retries, identity checks, a dual-write mirror. A <code>get_context_service</code> was injected into <strong>twelve</strong> call sites across the sub-agents. By every structural measure, memory was wired.</p>
+      <p>Then the read path: <code>get_context_messages()</code>. The body that transformed stored records back into model messages had been <em>commented out</em> during some past refactor and replaced with a bare <code>return []</code>. Its one caller — the master turn loop — dutifully fetched history at the top of every request and received an empty list. The README promised "resume any conversation by its <code>contextId</code>." The code wrote that history faithfully and never read a word of it back.</p>
+
+      <figure>
+        <div class="fig-card">
+          <svg class="diagram-grid" viewBox="0 0 720 288" role="img" aria-label="A writer path fills the context store successfully in teal; the store visibly holds records; the read path returns an empty list in clay-red because the transform is stubbed, so the reader starts every turn blind.">
+            <!-- writer -->
+            <rect x="20" y="30" width="176" height="58" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+            <text x="108" y="55" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">Turn N — writer</text>
+            <text x="108" y="73" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--slate)">save_context()</text>
+
+            <!-- reader -->
+            <rect x="20" y="198" width="176" height="60" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+            <text x="108" y="223" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">Turn N+1 — reader</text>
+            <text x="108" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--slate)">get_context_messages()</text>
+
+            <!-- store -->
+            <rect x="470" y="86" width="230" height="116" rx="10" fill="var(--surface)" stroke="var(--signal)" stroke-width="1.5"/>
+            <text x="585" y="112" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">Context store</text>
+            <text x="585" y="128" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">persisted · healthy</text>
+            <line x1="502" y1="148" x2="668" y2="148" stroke="var(--signal)" stroke-width="2" opacity=".55"/>
+            <line x1="502" y1="163" x2="668" y2="163" stroke="var(--signal)" stroke-width="2" opacity=".55"/>
+            <line x1="502" y1="178" x2="620" y2="178" stroke="var(--signal)" stroke-width="2" opacity=".55"/>
+
+            <!-- write arrow (works) -->
+            <path d="M196 59 H360 Q372 59 372 71 V128 Q372 140 384 140 H462" fill="none" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#tealArrow)"/>
+            <text x="300" y="49" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--signal-strong)">writes context ✓</text>
+
+            <!-- read response (broken) -->
+            <path d="M470 168 H392 Q380 168 380 180 V214 Q380 226 368 226 H200" fill="none" stroke="var(--break)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#redArrow)"/>
+            <text x="300" y="205" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)">returns [ ]</text>
+            <text x="300" y="248" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">transform commented out</text>
+
+            <defs>
+              <marker id="tealArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--signal)"/></marker>
+              <marker id="redArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--break)"/></marker>
+            </defs>
+          </svg>
+        </div>
+        <figcaption><b>The asymmetry is the bug.</b> Writes land and the store fills — the records are right there. The read comes back empty not because the store is empty, but because the one function that turns records into messages was stubbed. A test that checks "did we save?" passes. Only "does turn 2 see turn 1?" catches it.</figcaption>
+      </figure>
+
+      <p>Why it hides so well: every <em>observable</em> signal is green. The store fills. Save calls succeed. Twelve injection points resolve. Dashboards show context written. The single severed hop is a pure-function transform with no side effect to monitor — and the model, handed an empty history, simply behaves like a stateless chatbot, which reads as "small models are just forgetful," not "our read path returns a literal empty list."</p>
+
+      <div class="callout">
+        <p class="eyebrow">The tell</p>
+        <p>Infrastructure breadth is not infrastructure depth. Twelve call sites wired to a service says the <em>plumbing</em> is done; it says nothing about whether water comes out. Grep your persistence and tool layers for <code>return []</code>, <code>return None</code>, <code>pass</code>, and <code>TODO</code> sitting inside functions the README describes as working.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <div class="trap-head">
+        <div class="trap-num">TRAP 02</div>
+        <h2>The text-JSON detour
+          <span class="sub">tool calls parsed out of prose with a regex</span>
+        </h2>
+      </div>
+
+      <p>Modern model endpoints expose <em>native</em> function calling: the model emits a structured <code>tool_calls</code> field, the runtime reads <code>name</code> and <code>arguments</code> straight off it, dispatch is unambiguous. The harness I audited didn't use it. Instead it prompted the model to print a fenced JSON block, then recovered the call with <code>re.search(r'```json ... ```')</code> over the raw text — and bound tools natively only in a mock path that production never touched.</p>
+      <p>This works in the demo because a 14B model, well-prompted, usually formats the block correctly. "Usually" is the whole problem. The moment the model wraps the JSON in a sentence, emits two blocks, trails a comma, or the regex meets a nested brace, the parse silently misses — and a missed parse is indistinguishable, downstream, from "the model chose not to call a tool."</p>
+
+      <figure>
+        <div class="fig-card">
+          <svg class="diagram-grid" viewBox="0 0 720 300" role="img" aria-label="Two lanes from model output to tool execution. The native lane goes model to structured tool_calls to dispatch to tool in teal. The text-JSON lane inserts a fragile regex-parse hop in clay-red that can miss and drop the call.">
+            <!-- shared start -->
+            <rect x="16" y="120" width="120" height="58" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+            <text x="76" y="146" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">model</text>
+            <text x="76" y="163" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">output</text>
+
+            <!-- shared end -->
+            <rect x="584" y="120" width="120" height="58" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+            <text x="644" y="146" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">tool runs</text>
+            <text x="644" y="163" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">name + args</text>
+
+            <!-- LANE 1: native (top) -->
+            <text x="150" y="52" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="600" fill="var(--signal-strong)" letter-spacing=".08em">NATIVE FUNCTION CALLING</text>
+            <path d="M136 132 Q150 132 158 96 Q164 78 200 78 H236" fill="none" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#t2)"/>
+            <rect x="238" y="60" width="150" height="40" rx="7" fill="var(--signal-wash)" stroke="var(--signal)" stroke-width="1.5"/>
+            <text x="313" y="84" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--ink)">tool_calls{}</text>
+            <path d="M388 80 H470" fill="none" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#t2)"/>
+            <rect x="472" y="60" width="96" height="40" rx="7" fill="var(--surface)" stroke="var(--line)"/>
+            <text x="520" y="84" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--ink)">dispatch</text>
+            <path d="M568 80 Q604 80 620 116" fill="none" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#t2)"/>
+            <text x="405" y="120" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="11.5" fill="var(--slate)">structured · unambiguous</text>
+
+            <!-- LANE 2: text-json (bottom) -->
+            <text x="150" y="214" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="600" fill="var(--break)" letter-spacing=".08em">PROMPT-JSON + REGEX</text>
+            <path d="M136 166 Q150 166 158 202 Q164 224 196 224 H214" fill="none" stroke="var(--slate)" stroke-width="2.5" marker-end="url(#g2)"/>
+            <rect x="216" y="228" width="122" height="40" rx="7" fill="var(--surface)" stroke="var(--line)"/>
+            <text x="277" y="252" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--ink)">```json … ```</text>
+            <path d="M338 248 H360" fill="none" stroke="var(--slate)" stroke-width="2.5" marker-end="url(#g2)"/>
+            <rect x="362" y="228" width="118" height="40" rx="7" fill="var(--break-wash)" stroke="var(--break)" stroke-width="1.5"/>
+            <text x="421" y="248" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="var(--ink)">re.search()</text>
+            <text x="421" y="261" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8.5" fill="var(--break)">fragile hop</text>
+            <path d="M480 248 H506 Q520 248 520 220 V182" fill="none" stroke="var(--slate)" stroke-width="2.5" marker-end="url(#g2)"/>
+
+            <!-- miss branch -->
+            <path d="M421 268 V292" fill="none" stroke="var(--break)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#r2)"/>
+            <text x="431" y="285" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--break)">no match → call dropped silently</text>
+
+            <defs>
+              <marker id="t2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--signal)"/></marker>
+              <marker id="g2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--slate)"/></marker>
+              <marker id="r2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--break)"/></marker>
+            </defs>
+          </svg>
+        </div>
+        <figcaption><b>Draw the difference: it's one hop.</b> The text-JSON lane inserts a regex parse between the model and dispatch that the native lane simply doesn't have. Every failure mode of that lane lives in that one added box — and when it fails, it fails toward "no tool call," the one outcome that looks like a legitimate model decision.</figcaption>
+      </figure>
+
+      <p>There's a second, subtler reason to prefer the native field even though it, too, can break: when it breaks, it tends to break <em>loudly</em>. Which brings up its sibling —</p>
+
+      <div class="callout">
+        <p class="eyebrow">Sibling failure · same boundary</p>
+        <p>Native tool calling isn't automatically safe either. On OpenAI-compatible endpoints served by some inference backends, streamed <code>tool_calls</code> continuation chunks repeat <code>name</code> and <code>id</code> as an explicit <code>null</code> where the reference API simply omits them. An accumulator written as <code>if (delta.name !== undefined)</code> lets that <code>null</code> overwrite the real name captured in the first chunk — and every call arrives as <code>unknown tool ""</code>. The fix is <code>!= null</code>. Same lesson as Trap 02, one layer down: <em>the wire boundary between you and the model is where provider conventions diverge, and where "usually fine" parsing goes to die.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <p class="eyebrow">Why both survive to production</p>
+      <h2 style="margin:.5em 0 .7em">A demo exercises the happy path exactly once.</h2>
+      <p>Both traps share a signature: a component that is <strong>structurally present and functionally empty</strong>, failing toward a value that looks legitimate. Empty history reads as forgetfulness. A dropped tool call reads as a model decision. Neither throws. Neither pages anyone. And a demo — one clean turn, one well-formed call — never lands on the input that reveals the hole. The gap between "wired" and "works" is exactly the set of inputs your demo didn't try.</p>
+    </div>
+
+    <div class="table-region col" style="max-width:none">
+      <p class="eyebrow">If you'd rather not hand-build it</p>
+      <h3 style="margin:.5em 0 .3em">Small-model harness &amp; memory libraries</h3>
+      <p class="col" style="margin-bottom:0">Where a self-built harness keeps drifting into these traps, a maintained library has usually already paid for the boundary handling. Rough positioning for a <code>7B–14B</code> + tool-call + memory stack. Stars as of Aug 2026.</p>
+      <div class="scroll" style="margin-top:1.4em">
+        <table>
+          <thead>
+            <tr><th scope="col">Project</th><th scope="col">Stars</th><th scope="col">What it is</th><th scope="col">Memory model</th><th scope="col">Reach for it when</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">LangGraph</th>
+              <td><span class="num">40.2k</span></td>
+              <td class="row-note">Graph runtime for agent control flow; <code>create_react_agent</code> over any OpenAI-compatible endpoint.</td>
+              <td class="row-note">Checkpointer (short-term) + store (long-term, Postgres-backed).</td>
+              <td class="row-note"><span class="tag pick">production</span> Strongest control &amp; state boundaries. Serious deployments.</td>
+            </tr>
+            <tr>
+              <th scope="row">Qwen-Agent</th>
+              <td><span class="num">17.0k</span></td>
+              <td class="row-note">Alibaba's harness with native Qwen function-call templates; points at vLLM.</td>
+              <td class="row-note">History accumulation + automatic file RAG.</td>
+              <td class="row-note"><span class="tag pick">fastest fit</span> Your model stack is Qwen. Least glue code.</td>
+            </tr>
+            <tr>
+              <th scope="row">Letta <span class="tag">ex-MemGPT</span></th>
+              <td><span class="num">24.3k</span></td>
+              <td class="row-note">Agent server built around self-editing tiered memory.</td>
+              <td class="row-note">Core / archival / recall tiers, auto-persisted across sessions.</td>
+              <td class="row-note"><span class="tag pick">memory-first</span> Long-term memory is the hard requirement, not a feature.</td>
+            </tr>
+            <tr>
+              <th scope="row">smolagents</th>
+              <td><span class="num">28.9k</span></td>
+              <td class="row-note">~1k-line minimalist harness; <code>CodeAgent</code> expresses actions as code.</td>
+              <td class="row-note">Lightweight / bring-your-own.</td>
+              <td class="row-note"><span class="tag">prototype</span> Experiments, local <code>transformers</code>/Ollama, teaching.</td>
+            </tr>
+            <tr>
+              <th scope="row">mem0</th>
+              <td><span class="num">63.8k</span></td>
+              <td class="row-note">Memory <em>layer</em>, not a harness — bolts long-term recall onto any runtime.</td>
+              <td class="row-note">Its whole job; local embeddings configurable.</td>
+              <td class="row-note"><span class="tag">component</span> You keep your harness but Trap 01 keeps biting.</td>
+            </tr>
+            <tr>
+              <th scope="row">gorilla / BFCL</th>
+              <td><span class="num">13.0k</span></td>
+              <td class="row-note">Training + evaluation for function calling, not a runtime.</td>
+              <td class="row-note">n/a</td>
+              <td class="row-note"><span class="tag">eval</span> Picking <em>which</em> small model calls tools well (BFCL leaderboard).</td>
+            </tr>
+            <tr>
+              <th scope="row">AutoGen</th>
+              <td><span class="num">60.6k</span></td>
+              <td class="row-note">Multi-agent framework — now in maintenance mode.</td>
+              <td class="row-note">Conversational history.</td>
+              <td class="row-note"><span class="tag warn">migration risk</span> Official guidance points to a successor. New builds: weigh it.</td>
+            </tr>
+            <tr>
+              <th scope="row">Open&nbsp;Interpreter</th>
+              <td><span class="num">68.1k</span></td>
+              <td class="row-note">Rewritten into a Rust coding CLI agent; no longer a general harness.</td>
+              <td class="row-note">Session-scoped.</td>
+              <td class="row-note"><span class="tag warn">repurposed</span> Want the CLI tool, not a library to build on.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <p class="eyebrow">Before you call it shipped</p>
+      <h2 style="margin:.5em 0 .2em">Four smoke tests that catch a hollow pillar</h2>
+      <ul class="checks">
+        <li><b>Turn 2 sees turn 1</b><span>An integration test — not a mock — that runs two turns against the real store and asserts the second turn's history is non-empty. This single test would have caught Trap 01 on day one.</span></li>
+        <li><b>Log the parsed tool name, alarm on empty</b><span>Emit the resolved <code>name</code> for every call and alert when it's empty or unknown. A dropped or blanked call should page someone, not blend into "the model didn't call anything."</span></li>
+        <li><b>Diff the README against the code</b><span>For each capability the docs claim works, point at the function that delivers it. Grep those layers for <code>return []</code>, <code>return None</code>, <code>pass</code>, <code>TODO</code> in bodies that are supposed to do work.</span></li>
+        <li><b>Test the wire, not the SDK's happy path</b><span>Capture real streamed chunks from your actual endpoint — explicit <code>null</code>s, split arguments, wrapped blocks — and replay them through your parser. Provider conventions diverge exactly where your unit tests assume they won't.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="col">
+      <b>Wired but Dark</b> — field notes on the POC-to-production gap in small-model agent harnesses.<br>
+      Patterns generalized from a real audit; identifiers are illustrative. Star counts pulled Aug 2026 and will drift.<br>
+      Two lessons, one shape: a pillar can be fully wired and carry no signal — and the wire boundary to the model is where conventions quietly diverge.
+    </div>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeBtn');
+    var root = document.documentElement;
+    var saved = null;
+    try { saved = localStorage.getItem('wbd-theme'); } catch (e) {}
+    if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+
+    function current() {
+      var t = root.getAttribute('data-theme');
+      if (t) return t;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    function render() { btn.textContent = current() === 'dark' ? '◐ Dark' : '◑ Light'; }
+    render();
+
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('wbd-theme', next); } catch (e) {}
+      render();
+    });
+  })();
+</script>
