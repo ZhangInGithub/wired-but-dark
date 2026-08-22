@@ -1,7 +1,12 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wired but Dark</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&display=swap">
 
 <style>
   :root {
@@ -14,9 +19,10 @@
     --fs-h2:clamp(1.55rem,3.3vw,2.2rem);
     --fs-body:1.0625rem;
     --measure:68ch;
-    --disp:"Archivo",system-ui,sans-serif;
-    --body:"Newsreader",Georgia,serif;
-    --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",monospace;
+    --disp:"Archivo","Noto Serif SC",system-ui,sans-serif;
+    --body:"Newsreader","Noto Serif SC",Georgia,serif;
+    --mono:"JetBrains Mono","Noto Sans SC",ui-monospace,"SFMono-Regular",monospace;
+    --sans-cjk:"Noto Sans SC",system-ui,sans-serif;
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
@@ -39,7 +45,7 @@
   html{-webkit-text-size-adjust:100%}
   body{
     margin:0; background:var(--paper); color:var(--ink-soft);
-    font-family:var(--body); font-size:var(--fs-body); line-height:1.66;
+    font-family:var(--body); font-size:var(--fs-body); line-height:1.78;
     font-optical-sizing:auto;
     -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
   }
@@ -78,6 +84,24 @@
     cursor:pointer; transition:border-color .2s, color .2s}
   .theme-btn:hover{border-color:var(--signal); color:var(--ink)}
   .theme-btn:focus-visible{outline:2px solid var(--signal); outline-offset:2px}
+  .topbar-actions{display:flex; align-items:center; gap:10px}
+  .gh-btn{display:inline-flex; align-items:center; gap:.5em;
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--slate); background:transparent; border:1px solid var(--line);
+    border-radius:999px; padding:.5em 1em; cursor:pointer; text-decoration:none;
+    transition:border-color .2s, color .2s, background .2s}
+  .gh-btn svg{width:15px; height:15px; fill:currentColor; flex:none}
+  .gh-btn:hover{border-color:var(--signal); color:var(--ink); background:var(--signal-wash)}
+  .gh-btn:focus-visible{outline:2px solid var(--signal); outline-offset:2px}
+  .gh-cta{display:inline-flex; align-items:center; gap:.6em;
+    font-family:var(--mono); font-size:.82rem; letter-spacing:.04em;
+    color:var(--surface); background:var(--signal-strong); border:1px solid var(--signal-strong);
+    border-radius:999px; padding:.7em 1.4em; text-decoration:none; font-weight:600;
+    transition:background .2s, transform .1s}
+  .gh-cta svg{width:18px; height:18px; fill:currentColor; flex:none}
+  .gh-cta:hover{background:var(--signal); transform:translateY(-1px)}
+  .gh-cta:focus-visible{outline:2px solid var(--signal); outline-offset:3px}
+  .footer-cta{margin-top:1.6em}
 
   h1{font-size:var(--fs-display); margin:.5em 0 0}
   .deck{font-size:clamp(1.12rem,2.2vw,1.4rem); color:var(--ink-soft);
@@ -195,22 +219,30 @@
     @keyframes draw{to{stroke-dashoffset:0}}
   }
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <header>
     <div class="topbar">
       <div class="mark"><b>Field Notes</b> &nbsp;/&nbsp; Agent Infrastructure</div>
-      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch color theme">Theme</button>
+      <div class="topbar-actions">
+        <a class="gh-btn" href="https://github.com/ZhangInGithub/wired-but-dark" target="_blank" rel="noopener" aria-label="在 GitHub 上查看本仓库">
+          <svg viewBox="0 0 16 16" role="img" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span>GitHub</span>
+        </a>
+        <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch color theme">Theme</button>
+      </div>
     </div>
 
-    <p class="eyebrow" style="margin-top:2.6em">The POC-to-production gap</p>
+    <p class="eyebrow" style="margin-top:2.6em">从 POC 到生产的裂缝</p>
     <h1>Wired but Dark</h1>
-    <p class="deck">Everyone ships <em>stateful agents</em> now. Statefulness is a property of the read path — not the store. Two harnesses passed every demo and were quietly stateless in production.</p>
+    <p class="deck">如今人人都在做 <em>stateful agents</em>。可有状态是<strong>读路径</strong>的属性 —— 不是存储的属性。两套 harness 通过了每一次 demo，却在生产环境里悄悄退化成了无状态。</p>
 
     <div class="meta">
-      <span>Retrospective · self-built harness audit</span>
-      <span>Aug 2026</span>
-      <span>Read time ~8 min</span>
+      <span>复盘 · 自建 harness 审计</span>
+      <span>2026 年 8 月</span>
+      <span>阅读约 8 分钟</span>
     </div>
 
     <!-- header motif: a signal trace that looks continuous but carries a gap -->
@@ -225,8 +257,8 @@
 
   <section>
     <div class="col">
-      <p class="lede first">The most expensive bugs in an agent stack aren't the ones that crash. They're the ones that return a plausible value — an empty list, a well-formed string — and let everything downstream keep running as if the system worked. The harness passes its demo, ships, and only reveals the hole under real traffic, months later, as "the agent feels like it has no memory" or "tools work, except when they don't."</p>
-      <p>I audited a production harness built to orchestrate a 14B-parameter open model across a fleet of specialist sub-agents. On paper it had everything: persistent context, a tool layer, a supervisor router. Two of those pillars were hollow — not missing, <em>hollow</em>. The scaffolding around them was complete enough that no one noticed. Here are both, generalized to the pattern, because if you've built a harness around a small model you have probably shipped at least one of them.</p>
+      <p class="lede first">Agent 系统里最贵的 bug 从来不是崩溃的那种，而是那些<em>返回一个看似合理的值</em>的 —— 一个空列表、一段格式完好的字符串 —— 让下游一切照常运行，仿佛系统真的在工作。harness 通过了 demo、上了线，只在几个月后的真实流量里才暴露出窟窿：表现为"这 agent 好像没有记忆"，或者"工具能用，除了它不能用的时候"。</p>
+      <p>我审计过一套生产环境的 harness，它用一个 14B 参数的开源模型驱动一队专职子 agent。纸面上它什么都有：持久化上下文、工具层、supervisor 路由。但其中两根支柱是空心的 —— 不是缺失，是<em>空心</em>。围绕它们的脚手架足够完整，完整到没人察觉。下面把这两个都还原成通用的模式讲一遍 —— 因为如果你也围着一个小模型搭过 harness，你大概率至少踩中过其中一个。</p>
     </div>
   </section>
 
@@ -234,43 +266,43 @@
     <div class="col">
       <div class="trap-head">
         <div class="trap-num">TRAP 01</div>
-        <h2>The wired stub
-          <span class="sub">memory that saves perfectly and reads back nothing</span>
+        <h2>接好线，却不通电
+          <span class="sub">存得完美、读回来却什么都没有的记忆</span>
         </h2>
       </div>
 
-      <p>The harness had a real persistence layer. Context was written to a store on every turn — with append semantics, version-conflict retries, identity checks, a dual-write mirror. A <code>get_context_service</code> was injected into <strong>twelve</strong> call sites across the sub-agents. By every structural measure, memory was wired.</p>
-      <p>Then the read path: <code>get_context_messages()</code>. The body that transformed stored records back into model messages had been <em>commented out</em> during some past refactor and replaced with a bare <code>return []</code>. Its one caller — the master turn loop — dutifully fetched history at the top of every request and received an empty list. The README promised "resume any conversation by its <code>contextId</code>." The code wrote that history faithfully and never read a word of it back.</p>
+      <p>这套 harness 有一个货真价实的持久化层。每一轮都把上下文写进存储 —— append 语义、版本冲突重试、身份校验、双写镜像一应俱全。一个 <code>get_context_service</code> 被注入到子 agent 的 <strong>十二</strong> 个调用点。按任何结构性指标衡量，记忆都是接好线的。</p>
+      <p>然后是读路径：<code>get_context_messages()</code>。那段把存储记录还原成模型消息的函数体，在过去某次重构里被<em>注释掉了</em>，替换成一句光秃秃的 <code>return []</code>。它唯一的调用方 —— 主轮次循环 —— 尽职地在每个请求开头拉取历史，拿回一个空列表。README 承诺"凭 <code>contextId</code> 恢复任意对话"。代码忠实地写下了那段历史，却一个字都没读回来过。</p>
 
       <figure>
         <div class="fig-card">
-          <svg class="diagram-grid" viewBox="0 0 720 288" role="img" aria-label="A writer path fills the context store successfully in teal; the store visibly holds records; the read path returns an empty list in clay-red because the transform is stubbed, so the reader starts every turn blind.">
+          <svg class="diagram-grid" viewBox="0 0 720 288" role="img" aria-label="写入路径以青色成功填满上下文存储；存储明显持有记录；读路径因为变换函数被打桩而以陶红色返回空列表，于是读取方每一轮都从盲态开始。">
             <!-- writer -->
             <rect x="20" y="30" width="176" height="58" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
-            <text x="108" y="55" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">Turn N — writer</text>
+            <text x="108" y="55" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">第 N 轮 · 写入</text>
             <text x="108" y="73" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--slate)">save_context()</text>
 
             <!-- reader -->
             <rect x="20" y="198" width="176" height="60" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
-            <text x="108" y="223" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">Turn N+1 — reader</text>
+            <text x="108" y="223" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">第 N+1 轮 · 读取</text>
             <text x="108" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--slate)">get_context_messages()</text>
 
             <!-- store -->
             <rect x="470" y="86" width="230" height="116" rx="10" fill="var(--surface)" stroke="var(--signal)" stroke-width="1.5"/>
-            <text x="585" y="112" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">Context store</text>
-            <text x="585" y="128" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">persisted · healthy</text>
+            <text x="585" y="112" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">上下文存储</text>
+            <text x="585" y="128" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">已持久化 · 健康</text>
             <line x1="502" y1="148" x2="668" y2="148" stroke="var(--signal)" stroke-width="2" opacity=".55"/>
             <line x1="502" y1="163" x2="668" y2="163" stroke="var(--signal)" stroke-width="2" opacity=".55"/>
             <line x1="502" y1="178" x2="620" y2="178" stroke="var(--signal)" stroke-width="2" opacity=".55"/>
 
             <!-- write arrow (works) -->
             <path d="M196 59 H360 Q372 59 372 71 V128 Q372 140 384 140 H462" fill="none" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#tealArrow)"/>
-            <text x="300" y="49" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--signal-strong)">writes context ✓</text>
+            <text x="300" y="49" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--signal-strong)">写入上下文 ✓</text>
 
             <!-- read response (broken) -->
             <path d="M470 168 H392 Q380 168 380 180 V214 Q380 226 368 226 H200" fill="none" stroke="var(--break)" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#redArrow)"/>
-            <text x="300" y="205" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)">returns [ ]</text>
-            <text x="300" y="248" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">transform commented out</text>
+            <text x="300" y="205" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)">返回 [ ]</text>
+            <text x="300" y="248" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">变换函数被注释掉</text>
 
             <defs>
               <marker id="tealArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--signal)"/></marker>
@@ -278,15 +310,15 @@
             </defs>
           </svg>
         </div>
-        <figcaption><b>The asymmetry is the bug.</b> Writes land and the store fills — the records are right there. The read comes back empty not because the store is empty, but because the one function that turns records into messages was stubbed. A test that checks "did we save?" passes. Only "does turn 2 see turn 1?" catches it.</figcaption>
+        <figcaption><b>不对称本身就是这个 bug。</b>写入落盘、存储被填满 —— 记录就在那儿。读回来是空的，不是因为存储空了，而是因为那唯一一个把记录转成消息的函数被打了桩。一个检查"存了吗？"的测试会通过。只有"第 2 轮看得见第 1 轮吗？"才抓得到它。</figcaption>
       </figure>
 
-      <p>Why it hides so well: every <em>observable</em> signal is green. The store fills. Save calls succeed. Twelve injection points resolve. Dashboards show context written. The single severed hop is a pure-function transform with no side effect to monitor — and the model, handed an empty history, simply behaves like a stateless chatbot, which reads as "small models are just forgetful," not "our read path returns a literal empty list."</p>
-      <p class="reframe"><span class="reframe-tag">2026 lens</span> The ecosystem now sells this pillar by name — <em>"universal memory layer,"</em> <em>"stateful agents,"</em> <em>"durable execution."</em> But a memory layer that writes and never reads is a write-only log, and statefulness is a property of the <em>read</em> path. This isn't a missing feature; it's a durability failure wearing a green dashboard.</p>
+      <p>它为什么藏得这么深：每一个<em>可观测</em>的信号都是绿的。存储在填满。save 调用成功。十二个注入点都能解析。看板显示上下文已写入。那唯一被切断的一跳，是个没有副作用可供监控的纯函数变换 —— 而模型拿到一段空历史，就只是表现得像个无状态聊天机器人，读起来像"小模型本来就健忘"，而不是"我们的读路径返回了一个字面意义上的空列表"。</p>
+      <p class="reframe"><span class="reframe-tag">2026 视角</span> 整个生态如今正拿这根支柱当卖点 —— <em>"universal memory layer"</em>、<em>"stateful agents"</em>、<em>"durable execution"</em>。但一个只写不读的记忆层，是一份 write-only 日志；而有状态是<em>读</em>路径的属性。这不是缺了个功能，这是一场披着绿色看板的 durability failure（持久性失效）。</p>
 
       <div class="callout">
-        <p class="eyebrow">The tell</p>
-        <p>Infrastructure breadth is not infrastructure depth. Twelve call sites wired to a service says the <em>plumbing</em> is done; it says nothing about whether water comes out. Grep your persistence and tool layers for <code>return []</code>, <code>return None</code>, <code>pass</code>, and <code>TODO</code> sitting inside functions the README describes as working.</p>
+        <p class="eyebrow">破绽在这儿</p>
+        <p>基础设施的<em>广度</em>不等于它的<em>深度</em>。十二个调用点接到一个服务，说明<em>管道</em>铺好了；至于水到底出不出来，它一个字也没说。在你的持久化层和工具层里 grep 一下 <code>return []</code>、<code>return None</code>、<code>pass</code>、<code>TODO</code> —— 尤其是那些蹲在 README 声称"能用"的函数体里的。</p>
       </div>
     </div>
   </section>
@@ -295,18 +327,18 @@
     <div class="col">
       <div class="trap-head">
         <div class="trap-num">TRAP 02</div>
-        <h2>The text-JSON detour
-          <span class="sub">tool calls parsed out of prose with a regex</span>
+        <h2>绕道 text-JSON
+          <span class="sub">用正则从散文里抠出工具调用</span>
         </h2>
       </div>
 
-      <p>Modern model endpoints expose <em>native</em> function calling: the model emits a structured <code>tool_calls</code> field, the runtime reads <code>name</code> and <code>arguments</code> straight off it, dispatch is unambiguous. The harness I audited didn't use it. Instead it prompted the model to print a fenced JSON block, then recovered the call with <code>re.search(r'```json ... ```')</code> over the raw text — and bound tools natively only in a mock path that production never touched.</p>
-      <p>This works in the demo because a 14B model, well-prompted, usually formats the block correctly. "Usually" is the whole problem. The moment the model wraps the JSON in a sentence, emits two blocks, trails a comma, or the regex meets a nested brace, the parse silently misses — and a missed parse is indistinguishable, downstream, from "the model chose not to call a tool."</p>
-      <p class="reframe"><span class="reframe-tag">2026 lens</span> By now this isn't even a build-vs-buy call. The ecosystem standardized tool calls into a protocol — MCP, spec revision <code>2025-11-25</code>, adopted across the major frameworks — precisely so nobody hand-rolls the model↔tool boundary anymore. Parsing JSON out of prose isn't a shortcut past that; it's opting out of the one contract everyone else converged on.</p>
+      <p>现代模型端点都提供<em>原生</em>函数调用：模型吐出一个结构化的 <code>tool_calls</code> 字段，运行时直接从里面读 <code>name</code> 和 <code>arguments</code>，分发毫不含糊。我审计的这套 harness 没用它。它反而提示模型打印一段带围栏的 JSON，再用 <code>re.search(r'```json ... ```')</code> 在原始文本上把调用抠回来 —— 而原生绑定工具只存在于一条生产永远走不到的 mock 路径里。</p>
+      <p>这在 demo 里能跑，是因为一个 14B 模型在好提示词下<em>通常</em>能把那段格式打对。"通常"正是问题所在。只要模型把 JSON 裹进一句话、吐出两段块、多带一个逗号，或者正则撞上嵌套花括号，解析就会悄无声息地落空 —— 而一次落空的解析，在下游看来和"模型选择了不调工具"一模一样。</p>
+      <p class="reframe"><span class="reframe-tag">2026 视角</span> 到今天，这甚至不再是一道自建还是选型的题。整个生态已经把工具调用标准化成了一套协议 —— MCP，spec 版本 <code>2025-11-25</code>，主流框架悉数采纳 —— 正是为了让没人再去手搓模型↔工具这道边界。从散文里解析 JSON 不是绕过它的捷径，而是主动退出了所有人都已收敛到的那份唯一契约。</p>
 
       <figure>
         <div class="fig-card">
-          <svg class="diagram-grid" viewBox="0 0 720 300" role="img" aria-label="Two lanes from model output to tool execution. The native lane goes model to structured tool_calls to dispatch to tool in teal. The text-JSON lane inserts a fragile regex-parse hop in clay-red that can miss and drop the call.">
+          <svg class="diagram-grid" viewBox="0 0 720 300" role="img" aria-label="从模型输出到工具执行的两条泳道。原生泳道以青色从 model 经结构化 tool_calls 到 dispatch 再到工具。text-JSON 泳道插入一个脆弱的、以陶红色标记的正则解析跳步，可能落空并丢掉调用。">
             <!-- shared start -->
             <rect x="16" y="120" width="120" height="58" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
             <text x="76" y="146" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">model</text>
@@ -314,11 +346,11 @@
 
             <!-- shared end -->
             <rect x="584" y="120" width="120" height="58" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
-            <text x="644" y="146" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">tool runs</text>
+            <text x="644" y="146" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">工具执行</text>
             <text x="644" y="163" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--slate)">name + args</text>
 
             <!-- LANE 1: native (top) -->
-            <text x="150" y="52" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="600" fill="var(--signal-strong)" letter-spacing=".08em">NATIVE FUNCTION CALLING</text>
+            <text x="150" y="52" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="600" fill="var(--signal-strong)" letter-spacing=".08em">原生函数调用</text>
             <path d="M136 132 Q150 132 158 96 Q164 78 200 78 H236" fill="none" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#t2)"/>
             <rect x="238" y="60" width="150" height="40" rx="7" fill="var(--signal-wash)" stroke="var(--signal)" stroke-width="1.5"/>
             <text x="313" y="84" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--ink)">tool_calls{}</text>
@@ -326,22 +358,22 @@
             <rect x="472" y="60" width="96" height="40" rx="7" fill="var(--surface)" stroke="var(--line)"/>
             <text x="520" y="84" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" fill="var(--ink)">dispatch</text>
             <path d="M568 80 Q604 80 620 116" fill="none" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#t2)"/>
-            <text x="405" y="120" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="11.5" fill="var(--slate)">structured · unambiguous</text>
+            <text x="405" y="120" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="11.5" fill="var(--slate)">结构化 · 无歧义</text>
 
             <!-- LANE 2: text-json (bottom) -->
-            <text x="150" y="214" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="600" fill="var(--break)" letter-spacing=".08em">PROMPT-JSON + REGEX</text>
+            <text x="150" y="214" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="600" fill="var(--break)" letter-spacing=".08em">提示词-JSON + 正则</text>
             <path d="M136 166 Q150 166 158 202 Q164 224 196 224 H214" fill="none" stroke="var(--slate)" stroke-width="2.5" marker-end="url(#g2)"/>
             <rect x="216" y="228" width="122" height="40" rx="7" fill="var(--surface)" stroke="var(--line)"/>
             <text x="277" y="252" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--ink)">```json … ```</text>
             <path d="M338 248 H360" fill="none" stroke="var(--slate)" stroke-width="2.5" marker-end="url(#g2)"/>
             <rect x="362" y="228" width="118" height="40" rx="7" fill="var(--break-wash)" stroke="var(--break)" stroke-width="1.5"/>
             <text x="421" y="248" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="var(--ink)">re.search()</text>
-            <text x="421" y="261" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8.5" fill="var(--break)">fragile hop</text>
+            <text x="421" y="261" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8.5" fill="var(--break)">脆弱的一跳</text>
             <path d="M480 248 H506 Q520 248 520 220 V182" fill="none" stroke="var(--slate)" stroke-width="2.5" marker-end="url(#g2)"/>
 
             <!-- miss branch -->
             <path d="M421 268 V292" fill="none" stroke="var(--break)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#r2)"/>
-            <text x="431" y="285" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--break)">no match → call dropped silently</text>
+            <text x="431" y="285" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--break)">未命中 → 调用被静默丢弃</text>
 
             <defs>
               <marker id="t2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--signal)"/></marker>
@@ -350,39 +382,39 @@
             </defs>
           </svg>
         </div>
-        <figcaption><b>Draw the difference: it's one hop.</b> The text-JSON lane inserts a regex parse between the model and dispatch that the native lane simply doesn't have. Every failure mode of that lane lives in that one added box — and when it fails, it fails toward "no tool call," the one outcome that looks like a legitimate model decision.</figcaption>
+        <figcaption><b>把差别画出来：就差一跳。</b>text-JSON 泳道在模型和分发之间插了一个原生泳道压根没有的正则解析。这条泳道所有的失效模式，都住在那一个多出来的盒子里 —— 而一旦它失败，就朝着"没有工具调用"的方向失败，偏偏那是唯一一个看起来像模型正当决策的结果。</figcaption>
       </figure>
 
-      <p>There's a second, subtler reason to prefer the native field even though it, too, can break: when it breaks, it tends to break <em>loudly</em>. Which brings up its sibling —</p>
+      <p>还有第二个、更微妙的理由偏向原生字段 —— 尽管它同样会坏：当它坏的时候，往往坏得很<em>响</em>。这就引出了它那位同门 ——</p>
 
       <div class="callout">
-        <p class="eyebrow">Sibling failure · same boundary</p>
-        <p>Native tool calling isn't automatically safe either. On OpenAI-compatible endpoints served by some inference backends, streamed <code>tool_calls</code> continuation chunks repeat <code>name</code> and <code>id</code> as an explicit <code>null</code> where the reference API simply omits them. An accumulator written as <code>if (delta.name !== undefined)</code> lets that <code>null</code> overwrite the real name captured in the first chunk — and every call arrives as <code>unknown tool ""</code>. The fix is <code>!= null</code>. This is the failure class a <em>protocol</em> exists to kill — and it survives anyway, because the standard specifies the shape, not the wire drift of every backend claiming to speak it. Same lesson as Trap 02, one layer down: even on the native path, the boundary between you and the model is where provider conventions diverge, and where "usually fine" parsing goes to die.</p>
+        <p class="eyebrow">同门失效 · 同一道边界</p>
+        <p>原生工具调用也不是自动就安全的。在某些推理后端提供的 OpenAI 兼容端点上，流式 <code>tool_calls</code> 的续传 chunk 会把 <code>name</code> 和 <code>id</code> 显式重复成 <code>null</code>，而参考实现只是省略这些字段。一个写成 <code>if (delta.name !== undefined)</code> 的累加器，会让那个 <code>null</code> 覆盖掉首个 chunk 里抓到的真实名字 —— 于是每一次调用都变成 <code>unknown tool ""</code>。修法是 <code>!= null</code>。这正是<em>协议</em>本该杀死的那类失效 —— 可它照样活了下来，因为标准规定的是数据的<em>形状</em>，管不住每个自称说这套协议的后端在 wire 上各自的漂移。和 Trap 02 是同一课，只是往下沉了一层：哪怕走原生路径，你和模型之间的这道边界，仍然是各家 provider 约定发生分歧、"通常没事"的解析去送命的地方。</p>
       </div>
     </div>
   </section>
 
   <section>
     <div class="col">
-      <p class="eyebrow">Why 2026 makes this sharper</p>
-      <h2 style="margin:.5em 0 .6em">Statefulness is a property of the read path.</h2>
-      <p class="lede">The agent conversation has moved on. The pitch is no longer "can it call a tool" — it's <em>stateful agents</em>, <em>durable execution</em>, a <em>universal memory layer</em>. Which is exactly why these two traps matter more, not less: they're the gap between the property a harness advertises and the one it actually has. All three failures are invisible in the demo and visible only in the <em>trajectory</em>.</p>
+      <p class="eyebrow">为什么 2026 让这一切更锋利</p>
+      <h2 style="margin:.5em 0 .6em">有状态，是读路径的属性。</h2>
+      <p class="lede">Agent 的话题已经往前走了。卖点不再是"它能不能调工具"，而是 <em>stateful agents</em>、<em>durable execution</em>、一个 <em>universal memory layer</em>。而这恰恰是这两个陷阱更重要、而非更不重要的原因：它们正是一套 harness <em>宣称</em>拥有的属性，和它<em>实际</em>拥有的属性之间的那道缝。三个失效在 demo 里全都隐形，只有在 <em>trajectory（轨迹）</em>里才现形。</p>
 
       <ul class="frame-list">
-        <li><b>Trap 01 is a durability failure.</b> A store that writes and never reads is a write-only log. If your system is sold as stateful, an amnesiac read path isn't a missing feature — it's the headline promise, broken silently.</li>
-        <li><b>Trap 02 is opting out of the standard.</b> The ecosystem converged on a protocol for the model↔tool boundary (MCP, rev <code>2025-11-25</code>) so nobody hand-rolls it. Parsing tool calls out of prose in 2026 is choosing the one path the whole field agreed to abandon.</li>
-        <li><b>The sibling bug is spec drift at the wire.</b> Even native tool calling only standardizes the <em>shape</em>. An explicit <code>null</code> where the reference omits a field still slips through — the contract can't save you from a backend that speaks it loosely.</li>
+        <li><b>Trap 01 是一次 durability failure。</b>只写不读的存储，是一份 write-only 日志。如果你的系统是以"有状态"卖出去的，那么一条失忆的读路径就不是少了个功能 —— 而是那句头号承诺，正在无声地失效。</li>
+        <li><b>Trap 02 是主动退出标准。</b>生态已经就模型↔工具这道边界收敛到了一套协议（MCP，版本 <code>2025-11-25</code>），好让没人再去手搓它。2026 年还从散文里正则抠工具调用，等于选了整个领域已一致同意抛弃的那条路。</li>
+        <li><b>同门 bug 是 wire 层的 spec 漂移。</b>哪怕是原生工具调用，标准化的也只是数据的<em>形状</em>。在参考实现省略字段的地方塞一个显式 <code>null</code>，照样能溜过去 —— 契约救不了一个把它说得很随意的后端。</li>
       </ul>
 
       <figure class="fig-card">
-        <svg viewBox="0 0 720 300" role="img" aria-label="Two views of the same run: the demo view shows all-green surface signals, while the trajectory view exposes two dark severed hops — the blind memory read and the missed tool-call parse." style="max-width:100%;height:auto">
+        <svg viewBox="0 0 720 300" role="img" aria-label="同一次运行的两种视角：demo 视角里表层信号全绿，而 trajectory 视角暴露出两个被切断的暗跳步 —— 盲目的记忆读取，和落空的工具调用解析。" style="max-width:100%;height:auto">
           <defs>
             <marker id="okArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--signal)"/></marker>
             <marker id="badArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--break)"/></marker>
           </defs>
 
           <!-- Demo view -->
-          <text x="24" y="30" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--signal-strong)" letter-spacing=".08em">DEMO VIEW — all signals green</text>
+          <text x="24" y="30" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--signal-strong)" letter-spacing=".08em">DEMO 视角 — 信号全绿</text>
           <rect x="24" y="44" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
           <text x="84" y="72" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">prompt</text>
           <line x1="144" y1="67" x2="212" y2="67" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#okArrow)"/>
@@ -396,9 +428,9 @@
           <line x1="24" y1="128" x2="696" y2="128" stroke="var(--line)" stroke-width="1" stroke-dasharray="4 4"/>
 
           <!-- Trajectory view -->
-          <text x="24" y="164" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)" letter-spacing=".08em">TRAJECTORY VIEW — two dark hops</text>
+          <text x="24" y="164" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)" letter-spacing=".08em">TRAJECTORY 视角 — 两个暗跳步</text>
           <rect x="24" y="180" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
-          <text x="84" y="208" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">read memory</text>
+          <text x="84" y="208" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">读取记忆</text>
           <line x1="144" y1="203" x2="212" y2="203" stroke="var(--break)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#badArrow)"/>
           <text x="178" y="194" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="var(--break)">[]</text>
           <rect x="214" y="180" width="120" height="46" rx="8" fill="var(--break-wash)" stroke="var(--break)" stroke-width="1.5"/>
@@ -406,100 +438,100 @@
           <line x1="334" y1="203" x2="402" y2="203" stroke="var(--break)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#badArrow)"/>
           <text x="368" y="194" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="var(--break)">parse ✗</text>
           <rect x="404" y="180" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
-          <text x="464" y="208" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">no tool run</text>
-          <text x="560" y="208" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)">blind · deaf</text>
+          <text x="464" y="208" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">工具没跑</text>
+          <text x="556" y="208" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)">又盲 · 又聋</text>
         </svg>
-        <figcaption>The <b>same run</b>, two instruments. Surface signals stay green while the read path returns <b>[]</b> and the tool-call parse silently misses. Only the trajectory — the unit the field now evaluates on — shows the two dark hops.</figcaption>
+        <figcaption><b>同一次运行</b>，两台仪器。表层信号一路绿灯，而读路径返回 <b>[]</b>、工具调用的解析静默落空。只有 trajectory —— 这个领域如今用来评测的单位 —— 才显出那两个暗掉的跳步。</figcaption>
       </figure>
     </div>
   </section>
 
   <section>
       <div class="col">
-      <p class="eyebrow">Why both survive to production</p>
-      <h2 style="margin:.5em 0 .7em">A demo exercises the happy path exactly once.</h2>
-      <p>Both traps share a signature: a component that is <strong>structurally present and functionally empty</strong>, failing toward a value that looks legitimate. Empty history reads as forgetfulness. A dropped tool call reads as a model decision. Neither throws. Neither pages anyone. And a demo — one clean turn, one well-formed call — never lands on the input that reveals the hole. The gap between "wired" and "works" is exactly the set of inputs your demo didn't try.</p>
+      <p class="eyebrow">为什么两个都能活到生产</p>
+      <h2 style="margin:.5em 0 .7em">一次 demo，只把 happy path 走了整整一遍。</h2>
+      <p>两个陷阱共享同一种签名：一个<strong>结构上在场、功能上空心</strong>的组件，朝着一个看起来合法的值失效。空历史读起来像健忘。丢掉的工具调用读起来像模型的决定。两者都不抛异常，都不 page 任何人。而一次 demo —— 一个干净的轮次、一个格式良好的调用 —— 永远不会落在那个能暴露窟窿的输入上。"接好线"和"能工作"之间的距离，恰好就是你 demo 没试过的那批输入。</p>
     </div>
 
     <div class="table-region col" style="max-width:none">
-      <p class="eyebrow">If you'd rather not hand-build it</p>
-      <h3 style="margin:.5em 0 .3em">Small-model harness &amp; memory libraries</h3>
-      <p class="col" style="margin-bottom:0">Where a self-built harness keeps drifting into these traps, a maintained library — or the protocol beneath it — has usually already paid for the boundary handling. Rough positioning for a <code>7B–14B</code> + tool-call + memory stack. Stars as of Aug 2026; a few once-central projects have visibly stalled, and one contract has become the default everyone else builds on.</p>
+      <p class="eyebrow">如果你不想自己手搓</p>
+      <h3 style="margin:.5em 0 .3em">小模型 harness 与 memory 库</h3>
+      <p class="col" style="margin-bottom:0">当一套自建 harness 一次次滑进这些陷阱，一个有人维护的库 —— 或它底下的那套协议 —— 通常早已替你把边界处理的账付清了。下面是针对 <code>7B–14B</code> + 工具调用 + memory 技术栈的粗略定位。星数截至 2026 年 8 月；有几个一度处在中心的项目已明显停更，而有一份契约已成了其他所有人构建之上的默认底座。</p>
       <div class="scroll" style="margin-top:1.4em">
         <table>
           <thead>
-            <tr><th scope="col">Project</th><th scope="col">Stars</th><th scope="col">What it is</th><th scope="col">Memory model</th><th scope="col">Reach for it when</th></tr>
+            <tr><th scope="col">项目</th><th scope="col">Stars</th><th scope="col">是什么</th><th scope="col">记忆模型</th><th scope="col">什么时候选它</th></tr>
           </thead>
           <tbody>
             <tr class="row-std">
-              <th scope="row">MCP <span class="tag std">the standard</span></th>
+              <th scope="row">MCP <span class="tag std">事实标准</span></th>
               <td><span class="num">89.8k</span></td>
-              <td class="row-note">Not a harness — the <em>protocol</em> for the model↔tool boundary (spec rev <code>2025-11-25</code>). Servers repo 89.8k, Python SDK 24.1k.</td>
-              <td class="row-note">n/a (transport, not memory)</td>
-              <td class="row-note"><span class="tag pick">do this instead</span> The direct answer to Trap 02. Speak the contract; stop parsing prose.</td>
+              <td class="row-note">不是 harness —— 而是模型↔工具这道边界的<em>协议</em>（spec 版本 <code>2025-11-25</code>）。servers 仓 89.8k，Python SDK 24.1k。</td>
+              <td class="row-note">不适用（是传输层，不是记忆）</td>
+              <td class="row-note"><span class="tag pick">改用这个</span> Trap 02 的直接答案。说这套契约，别再解析散文。</td>
             </tr>
             <tr>
               <th scope="row">LangGraph</th>
               <td><span class="num">40.2k</span></td>
-              <td class="row-note">Graph runtime for agent control flow; <code>create_react_agent</code> over any OpenAI-compatible endpoint.</td>
-              <td class="row-note">Checkpointer (short-term) + store (long-term, Postgres-backed).</td>
-              <td class="row-note"><span class="tag pick">production</span> Strongest control &amp; state boundaries; durable execution. Serious deployments.</td>
+              <td class="row-note">面向 agent 控制流的图运行时；<code>create_react_agent</code> 可跑在任意 OpenAI 兼容端点上。</td>
+              <td class="row-note">Checkpointer（短期）+ store（长期，Postgres 支撑）。</td>
+              <td class="row-note"><span class="tag pick">生产级</span> 控制流与状态边界最扎实；支持 durable execution。用于正经部署。</td>
             </tr>
             <tr>
-              <th scope="row">Qwen-Agent <span class="tag stale">stalled ~6mo</span></th>
+              <th scope="row">Qwen-Agent <span class="tag stale">停更约 6 个月</span></th>
               <td><span class="num">17.0k</span></td>
-              <td class="row-note">Alibaba's harness with native Qwen function-call templates; points at vLLM.</td>
-              <td class="row-note">History accumulation + automatic file RAG.</td>
-              <td class="row-note"><span class="tag pick">fastest fit</span> Your model stack is Qwen. Least glue code — if you can live with a slow release cadence.</td>
+              <td class="row-note">阿里的 harness，自带 Qwen 原生函数调用模板；对接 vLLM。</td>
+              <td class="row-note">历史累积 + 自动文件 RAG。</td>
+              <td class="row-note"><span class="tag pick">上手最快</span> 你的模型栈就是 Qwen。胶水代码最少 —— 前提是你能接受它慢吞吞的发版节奏。</td>
             </tr>
             <tr>
-              <th scope="row">Letta <span class="tag">ex-MemGPT</span></th>
+              <th scope="row">Letta <span class="tag">前 MemGPT</span></th>
               <td><span class="num">24.3k</span></td>
-              <td class="row-note">Agent server built around self-editing tiered memory.</td>
-              <td class="row-note">Core / archival / recall tiers, auto-persisted across sessions.</td>
-              <td class="row-note"><span class="tag pick">memory-first</span> Long-term memory is the hard requirement, not a feature.</td>
+              <td class="row-note">围绕可自我编辑的分层记忆构建的 agent server。</td>
+              <td class="row-note">core / archival / recall 三层，跨会话自动持久化。</td>
+              <td class="row-note"><span class="tag pick">记忆优先</span> 长期记忆是硬需求，而不是一个附加功能。</td>
             </tr>
             <tr>
               <th scope="row">smolagents</th>
               <td><span class="num">28.9k</span></td>
-              <td class="row-note">~1k-line minimalist harness; <code>CodeAgent</code> expresses actions as code.</td>
-              <td class="row-note">Lightweight / bring-your-own.</td>
-              <td class="row-note"><span class="tag">prototype</span> Experiments, local <code>transformers</code>/Ollama, teaching.</td>
+              <td class="row-note">约千行的极简 harness；<code>CodeAgent</code> 把动作直接表达成代码。</td>
+              <td class="row-note">轻量 / 自备实现。</td>
+              <td class="row-note"><span class="tag">原型</span> 做实验、本地跑 <code>transformers</code>/Ollama、教学。</td>
             </tr>
             <tr>
               <th scope="row">mem0</th>
               <td><span class="num">63.8k</span></td>
-              <td class="row-note">Memory <em>layer</em>, not a harness — bolts long-term recall onto any runtime.</td>
-              <td class="row-note">Its whole job; local embeddings configurable.</td>
-              <td class="row-note"><span class="tag">component</span> You keep your harness but Trap 01 keeps biting.</td>
+              <td class="row-note">是一个记忆<em>层</em>，不是 harness —— 把长期记忆栓到任意运行时上。</td>
+              <td class="row-note">这就是它的全部工作；本地 embedding 可配。</td>
+              <td class="row-note"><span class="tag">组件</span> 你想保留自己的 harness，但 Trap 01 一直咬你。</td>
             </tr>
             <tr>
-              <th scope="row">gorilla / BFCL <span class="tag stale">stalled ~4mo</span></th>
+              <th scope="row">gorilla / BFCL <span class="tag stale">停更约 4 个月</span></th>
               <td><span class="num">13.0k</span></td>
-              <td class="row-note">Training + evaluation for function calling, not a runtime.</td>
-              <td class="row-note">n/a</td>
-              <td class="row-note"><span class="tag">eval</span> Picking <em>which</em> small model calls tools well (BFCL leaderboard).</td>
+              <td class="row-note">面向函数调用的训练 + 评测，不是运行时。</td>
+              <td class="row-note">不适用</td>
+              <td class="row-note"><span class="tag">评测</span> 用来挑<em>哪个</em>小模型工具调用调得好（BFCL 榜）。</td>
             </tr>
             <tr>
-              <th scope="row">AutoGen <span class="tag stale">stalled ~4mo</span></th>
+              <th scope="row">AutoGen <span class="tag stale">停更约 4 个月</span></th>
               <td><span class="num">60.6k</span></td>
-              <td class="row-note">Multi-agent framework — now in maintenance mode.</td>
-              <td class="row-note">Conversational history.</td>
-              <td class="row-note"><span class="tag warn">migration risk</span> Official guidance points to a successor. New builds: weigh it.</td>
+              <td class="row-note">多 agent 框架 —— 现已进入维护模式。</td>
+              <td class="row-note">对话历史。</td>
+              <td class="row-note"><span class="tag warn">迁移风险</span> 官方口径已指向继任项目。新项目：掂量一下。</td>
             </tr>
             <tr>
               <th scope="row">Open&nbsp;Interpreter</th>
               <td><span class="num">68.1k</span></td>
-              <td class="row-note">Rewritten into a Rust coding CLI agent; no longer a general harness.</td>
-              <td class="row-note">Session-scoped.</td>
-              <td class="row-note"><span class="tag warn">repurposed</span> Want the CLI tool, not a library to build on.</td>
+              <td class="row-note">已重写成一个 Rust 编码 CLI agent；不再是通用 harness。</td>
+              <td class="row-note">会话内作用域。</td>
+              <td class="row-note"><span class="tag warn">已转型</span> 你要的是那个 CLI 工具，而不是拿来搭东西的库。</td>
             </tr>
             <tr>
-              <th scope="row">Pydantic AI <span class="tag">newer</span></th>
+              <th scope="row">Pydantic AI <span class="tag">较新</span></th>
               <td><span class="num">19.4k</span></td>
-              <td class="row-note">Tool calls validated against typed schemas end-to-end; a parse either conforms or raises.</td>
-              <td class="row-note">Message history; pluggable.</td>
-              <td class="row-note"><span class="tag pick">type-safe</span> If Trap 02 scared you: the schema <em>is</em> the contract, checked at the boundary.</td>
+              <td class="row-note">工具调用端到端按类型化 schema 校验；一次解析要么符合、要么直接抛错。</td>
+              <td class="row-note">消息历史；可插拔。</td>
+              <td class="row-note"><span class="tag pick">类型安全</span> 如果 Trap 02 吓到你了：schema <em>就是</em>契约，在边界处当场校验。</td>
             </tr>
           </tbody>
         </table>
@@ -509,22 +541,28 @@
 
   <section>
     <div class="col">
-      <p class="eyebrow">Before you call it shipped</p>
-      <h2 style="margin:.5em 0 .2em">Four smoke tests that catch a hollow pillar</h2>
+      <p class="eyebrow">在你宣布"上线了"之前</p>
+      <h2 style="margin:.5em 0 .2em">四个能抓住空心支柱的冒烟测试</h2>
       <ul class="checks">
-        <li><b>Turn 2 sees turn 1</b><span>An integration test — not a mock — that runs two turns against the real store and asserts the second turn's history is non-empty. This single test would have caught Trap 01 on day one.</span></li>
-        <li><b>Log the parsed tool name, alarm on empty</b><span>Emit the resolved <code>name</code> for every call and alert when it's empty or unknown. A dropped or blanked call should page someone, not blend into "the model didn't call anything."</span></li>
-        <li><b>Diff the README against the code</b><span>For each capability the docs claim works, point at the function that delivers it. Grep those layers for <code>return []</code>, <code>return None</code>, <code>pass</code>, <code>TODO</code> in bodies that are supposed to do work.</span></li>
-        <li><b>Test the wire, not the SDK's happy path</b><span>Capture real streamed chunks from your actual endpoint — explicit <code>null</code>s, split arguments, wrapped blocks — and replay them through your parser. Provider conventions diverge exactly where your unit tests assume they won't.</span></li>
+        <li><b>第 2 轮看得见第 1 轮</b><span>一个集成测试 —— 不是 mock —— 对着真实存储跑两轮，断言第二轮拿到的历史非空。就这一个测试，第一天就能抓住 Trap 01。</span></li>
+        <li><b>把解析出的工具名打进日志，空了就告警</b><span>为每一次调用输出解析出的 <code>name</code>，当它为空或未知时告警。一次被丢弃或被抹空的调用应该 page 人，而不是混进"模型什么都没调"里。</span></li>
+        <li><b>拿 README 和代码对一遍 diff</b><span>文档声称能用的每一项能力，都指出交付它的那个函数。在这些层里 grep <code>return []</code>、<code>return None</code>、<code>pass</code>、<code>TODO</code> —— 尤其在那些本该干活的函数体里。</span></li>
+        <li><b>测 wire，别测 SDK 的 happy path</b><span>从你<em>真实</em>的端点抓下真实的流式 chunk —— 显式 <code>null</code>、被拆开的 arguments、被裹起来的块 —— 再把它们回放给你的解析器。各家 provider 的约定，恰恰在你的单测假设它们不会分歧的地方分歧。</span></li>
       </ul>
     </div>
   </section>
 
   <footer>
     <div class="col">
-      <b>Wired but Dark</b> — field notes on the POC-to-production gap in small-model agent harnesses.<br>
-      Patterns generalized from a real audit; identifiers are illustrative. Star counts pulled Aug 2026 and will drift.<br>
-      Two lessons, one shape: a pillar can be fully wired and carry no signal — and the wire boundary to the model is where conventions quietly diverge.
+      <b>Wired but Dark</b> —— 关于小模型 agent harness 从 POC 到生产那道裂缝的现场笔记。<br>
+      模式从一次真实审计中抽象而来，文中的标识符均为示意。星数于 2026 年 8 月抓取，会随时间漂移。<br>
+      两条教训，同一种形状：一根支柱可以接好了全部线路却不传递任何信号 —— 而通往模型的那道 wire 边界，正是各家约定悄悄分道扬镳的地方。
+      <div class="footer-cta">
+        <a class="gh-cta" href="https://github.com/ZhangInGithub/wired-but-dark" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" role="img" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span>在 GitHub 查看本仓库</span>
+        </a>
+      </div>
     </div>
   </footer>
 </div>
@@ -553,3 +591,5 @@
     });
   })();
 </script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 # Wired but Dark
 
-Field notes on the POC-to-production gap in **small-model agent harnesses**. Everyone ships *stateful agents* now — but **statefulness is a property of the read path, not the store**. Two harnesses passed every demo and were quietly stateless in production.
+关于**小模型 agent harness** 从 POC 到生产那道裂缝的现场笔记。如今人人都在做 *stateful agents* —— 但**有状态是读路径的属性，不是存储的属性**。两套 harness 通过了每一次 demo，却在生产环境里悄悄退化成了无状态。
 
-- **Trap 01 — The wired stub.** A persistence layer that saves perfectly and reads back nothing: the write path fills the store, but the read-side transform is stubbed to `return []`, so every turn starts blind. All the infrastructure is present; the one severed hop has no side effect to monitor. In 2026 terms this isn't a missing feature — it's a **durability failure** wearing a green dashboard: a "memory layer" that writes and never reads is a write-only log.
-- **Trap 02 — The text-JSON detour.** Tool calls parsed out of prose with a regex instead of native function calling. It works in the demo and misses silently the moment the model wraps the JSON, emits two blocks, or trails a comma — and a missed parse looks exactly like "the model chose not to call a tool." The ecosystem standardized this boundary into a protocol (**MCP**, spec rev `2025-11-25`) precisely so nobody hand-rolls it; regex-parsing is opting out of the one contract everyone converged on.
+- **Trap 01 —— 接好线，却不通电。** 一个存得完美、读回来却什么都没有的持久化层：写路径把存储填满，但读侧的变换函数被打桩成 `return []`，于是每一轮都从盲态开始。基础设施样样在场；那唯一被切断的一跳没有副作用可供监控。用 2026 的话说，这不是少了个功能 —— 而是一场披着绿色看板的 **durability failure（持久性失效）**：一个只写不读的"记忆层"，是一份 write-only 日志。
+- **Trap 02 —— 绕道 text-JSON。** 用正则从散文里抠工具调用，而不用原生函数调用。它在 demo 里能跑，可一旦模型把 JSON 裹进一句话、吐出两段块、或多带一个逗号，就会静默落空 —— 而一次落空的解析，看起来和"模型选择了不调工具"一模一样。生态早已把这道边界标准化成了一套协议（**MCP**，spec 版本 `2025-11-25`），正是为了让没人再去手搓它；用正则解析，等于主动退出了所有人都已收敛到的那份唯一契约。
 
-Plus a sibling failure at the wire boundary (streamed `tool_calls` with explicit `null` name/id overwriting a good value → `unknown tool ""` — spec drift the protocol can't catch), a synthesis section tying all three to the 2026 *stateful / MCP / trajectory* framing, a refreshed comparison table of maintained harness/memory libraries (stalled projects flagged, MCP added as the standout row), and four smoke tests that catch a hollow pillar.
+此外还有一个 wire 层的同门失效（流式 `tool_calls` 里显式的 `null` 覆盖掉了正确的 name/id → `unknown tool ""` —— 协议管不住的 spec 漂移）、一个把三者统一到 2026 *stateful / MCP / trajectory* 框架下的综述小节、一张刷新过的 harness/memory 库对比表（停更项目已标注，MCP 作为标杆行新增），以及四个能抓住空心支柱的冒烟测试。
 
-> The page uses custom CSS, theming, and hand-authored SVG diagrams, so GitHub's README/Gist sanitizer strips the design. **View it rendered via GitHub Pages** (link in the repo's About / Pages settings), or open `index.html` locally.
+> 页面用了自定义 CSS、主题切换和手工绘制的 SVG 图，GitHub 的 README/Gist 净化器会把这些设计悉数剥掉。**请通过 GitHub Pages 查看渲染后的版本**（链接在仓库 About / Pages 设置里），或在本地打开 `index.html`。
 
-Patterns are generalized from a real audit; identifiers are illustrative. Single self-contained HTML file, no build step.
+模式从一次真实审计中抽象而来，文中标识符均为示意。单个自包含 HTML 文件，无需构建。
