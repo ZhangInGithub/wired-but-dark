@@ -126,6 +126,19 @@
   .callout .eyebrow{margin-bottom:.5em}
   .callout p:last-child{margin-bottom:0}
 
+  /* 2026-lens reframe line inside a trap */
+  .reframe{font-size:.98rem; color:var(--ink-soft); border-left:2px solid var(--break);
+    background:var(--break-wash); padding:.75em 1em; border-radius:0 7px 7px 0; margin:1.4em 0 0}
+  .reframe em{color:var(--break); font-style:italic}
+  .reframe-tag{font-family:var(--mono); font-size:.62rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--break); font-weight:600;
+    padding:.15em .5em; border:1px solid var(--break); border-radius:4px; margin-right:.6em}
+
+  .frame-list{list-style:none; padding:0; margin:1.3em 0 1.5em; display:flex; flex-direction:column; gap:1.05em}
+  .frame-list li{padding-left:1.1em; border-left:2px solid var(--line); font-size:1.02rem;
+    color:var(--ink-soft); line-height:1.5}
+  .frame-list b{color:var(--ink); font-weight:600; font-family:var(--disp)}
+
   /* table */
   .table-region{margin-top:2em}
   .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px;
@@ -145,6 +158,10 @@
     color:var(--slate); white-space:nowrap; text-transform:uppercase}
   .tag.warn{color:var(--break); border-color:var(--break); background:var(--break-wash)}
   .tag.pick{color:var(--signal-strong); border-color:var(--signal); background:var(--signal-wash)}
+  .tag.stale{color:var(--break); border-color:var(--break); background:var(--break-wash); opacity:.9}
+  .tag.std{color:var(--signal-strong); border-color:var(--signal-strong); background:var(--signal-wash); font-weight:600}
+  .row-std th, .row-std td{background:var(--signal-wash)}
+  .row-std th[scope="row"]{box-shadow:inset 3px 0 0 var(--signal)}
   .row-note{font-size:.9rem; color:var(--ink-soft)}
 
   /* checklist */
@@ -188,12 +205,12 @@
 
     <p class="eyebrow" style="margin-top:2.6em">The POC-to-production gap</p>
     <h1>Wired but Dark</h1>
-    <p class="deck">Two failure modes that pass every demo and quietly die in production — in the harnesses we build to drive <em>small open models</em>.</p>
+    <p class="deck">Everyone ships <em>stateful agents</em> now. Statefulness is a property of the read path — not the store. Two harnesses passed every demo and were quietly stateless in production.</p>
 
     <div class="meta">
       <span>Retrospective · self-built harness audit</span>
       <span>Aug 2026</span>
-      <span>Read time ~7 min</span>
+      <span>Read time ~8 min</span>
     </div>
 
     <!-- header motif: a signal trace that looks continuous but carries a gap -->
@@ -265,6 +282,7 @@
       </figure>
 
       <p>Why it hides so well: every <em>observable</em> signal is green. The store fills. Save calls succeed. Twelve injection points resolve. Dashboards show context written. The single severed hop is a pure-function transform with no side effect to monitor — and the model, handed an empty history, simply behaves like a stateless chatbot, which reads as "small models are just forgetful," not "our read path returns a literal empty list."</p>
+      <p class="reframe"><span class="reframe-tag">2026 lens</span> The ecosystem now sells this pillar by name — <em>"universal memory layer,"</em> <em>"stateful agents,"</em> <em>"durable execution."</em> But a memory layer that writes and never reads is a write-only log, and statefulness is a property of the <em>read</em> path. This isn't a missing feature; it's a durability failure wearing a green dashboard.</p>
 
       <div class="callout">
         <p class="eyebrow">The tell</p>
@@ -284,6 +302,7 @@
 
       <p>Modern model endpoints expose <em>native</em> function calling: the model emits a structured <code>tool_calls</code> field, the runtime reads <code>name</code> and <code>arguments</code> straight off it, dispatch is unambiguous. The harness I audited didn't use it. Instead it prompted the model to print a fenced JSON block, then recovered the call with <code>re.search(r'```json ... ```')</code> over the raw text — and bound tools natively only in a mock path that production never touched.</p>
       <p>This works in the demo because a 14B model, well-prompted, usually formats the block correctly. "Usually" is the whole problem. The moment the model wraps the JSON in a sentence, emits two blocks, trails a comma, or the regex meets a nested brace, the parse silently misses — and a missed parse is indistinguishable, downstream, from "the model chose not to call a tool."</p>
+      <p class="reframe"><span class="reframe-tag">2026 lens</span> By now this isn't even a build-vs-buy call. The ecosystem standardized tool calls into a protocol — MCP, spec revision <code>2025-11-25</code>, adopted across the major frameworks — precisely so nobody hand-rolls the model↔tool boundary anymore. Parsing JSON out of prose isn't a shortcut past that; it's opting out of the one contract everyone else converged on.</p>
 
       <figure>
         <div class="fig-card">
@@ -338,13 +357,65 @@
 
       <div class="callout">
         <p class="eyebrow">Sibling failure · same boundary</p>
-        <p>Native tool calling isn't automatically safe either. On OpenAI-compatible endpoints served by some inference backends, streamed <code>tool_calls</code> continuation chunks repeat <code>name</code> and <code>id</code> as an explicit <code>null</code> where the reference API simply omits them. An accumulator written as <code>if (delta.name !== undefined)</code> lets that <code>null</code> overwrite the real name captured in the first chunk — and every call arrives as <code>unknown tool ""</code>. The fix is <code>!= null</code>. Same lesson as Trap 02, one layer down: <em>the wire boundary between you and the model is where provider conventions diverge, and where "usually fine" parsing goes to die.</em></p>
+        <p>Native tool calling isn't automatically safe either. On OpenAI-compatible endpoints served by some inference backends, streamed <code>tool_calls</code> continuation chunks repeat <code>name</code> and <code>id</code> as an explicit <code>null</code> where the reference API simply omits them. An accumulator written as <code>if (delta.name !== undefined)</code> lets that <code>null</code> overwrite the real name captured in the first chunk — and every call arrives as <code>unknown tool ""</code>. The fix is <code>!= null</code>. This is the failure class a <em>protocol</em> exists to kill — and it survives anyway, because the standard specifies the shape, not the wire drift of every backend claiming to speak it. Same lesson as Trap 02, one layer down: even on the native path, the boundary between you and the model is where provider conventions diverge, and where "usually fine" parsing goes to die.</p>
       </div>
     </div>
   </section>
 
   <section>
     <div class="col">
+      <p class="eyebrow">Why 2026 makes this sharper</p>
+      <h2 style="margin:.5em 0 .6em">Statefulness is a property of the read path.</h2>
+      <p class="lede">The agent conversation has moved on. The pitch is no longer "can it call a tool" — it's <em>stateful agents</em>, <em>durable execution</em>, a <em>universal memory layer</em>. Which is exactly why these two traps matter more, not less: they're the gap between the property a harness advertises and the one it actually has. All three failures are invisible in the demo and visible only in the <em>trajectory</em>.</p>
+
+      <ul class="frame-list">
+        <li><b>Trap 01 is a durability failure.</b> A store that writes and never reads is a write-only log. If your system is sold as stateful, an amnesiac read path isn't a missing feature — it's the headline promise, broken silently.</li>
+        <li><b>Trap 02 is opting out of the standard.</b> The ecosystem converged on a protocol for the model↔tool boundary (MCP, rev <code>2025-11-25</code>) so nobody hand-rolls it. Parsing tool calls out of prose in 2026 is choosing the one path the whole field agreed to abandon.</li>
+        <li><b>The sibling bug is spec drift at the wire.</b> Even native tool calling only standardizes the <em>shape</em>. An explicit <code>null</code> where the reference omits a field still slips through — the contract can't save you from a backend that speaks it loosely.</li>
+      </ul>
+
+      <figure class="fig-card">
+        <svg viewBox="0 0 720 300" role="img" aria-label="Two views of the same run: the demo view shows all-green surface signals, while the trajectory view exposes two dark severed hops — the blind memory read and the missed tool-call parse." style="max-width:100%;height:auto">
+          <defs>
+            <marker id="okArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--signal)"/></marker>
+            <marker id="badArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><polygon points="0 0, 9 4.5, 0 9" fill="var(--break)"/></marker>
+          </defs>
+
+          <!-- Demo view -->
+          <text x="24" y="30" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--signal-strong)" letter-spacing=".08em">DEMO VIEW — all signals green</text>
+          <rect x="24" y="44" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+          <text x="84" y="72" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">prompt</text>
+          <line x1="144" y1="67" x2="212" y2="67" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#okArrow)"/>
+          <rect x="214" y="44" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+          <text x="274" y="72" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">model</text>
+          <line x1="334" y1="67" x2="402" y2="67" stroke="var(--signal)" stroke-width="2.5" marker-end="url(#okArrow)"/>
+          <rect x="404" y="44" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+          <text x="464" y="72" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">reply</text>
+          <text x="600" y="72" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--signal-strong)">✓ ✓ ✓</text>
+
+          <line x1="24" y1="128" x2="696" y2="128" stroke="var(--line)" stroke-width="1" stroke-dasharray="4 4"/>
+
+          <!-- Trajectory view -->
+          <text x="24" y="164" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)" letter-spacing=".08em">TRAJECTORY VIEW — two dark hops</text>
+          <rect x="24" y="180" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+          <text x="84" y="208" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">read memory</text>
+          <line x1="144" y1="203" x2="212" y2="203" stroke="var(--break)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#badArrow)"/>
+          <text x="178" y="194" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="var(--break)">[]</text>
+          <rect x="214" y="180" width="120" height="46" rx="8" fill="var(--break-wash)" stroke="var(--break)" stroke-width="1.5"/>
+          <text x="274" y="208" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">model</text>
+          <line x1="334" y1="203" x2="402" y2="203" stroke="var(--break)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#badArrow)"/>
+          <text x="368" y="194" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="var(--break)">parse ✗</text>
+          <rect x="404" y="180" width="120" height="46" rx="8" fill="var(--surface-2)" stroke="var(--line)"/>
+          <text x="464" y="208" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--ink)">no tool run</text>
+          <text x="560" y="208" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="var(--break)">blind · deaf</text>
+        </svg>
+        <figcaption>The <b>same run</b>, two instruments. Surface signals stay green while the read path returns <b>[]</b> and the tool-call parse silently misses. Only the trajectory — the unit the field now evaluates on — shows the two dark hops.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+      <div class="col">
       <p class="eyebrow">Why both survive to production</p>
       <h2 style="margin:.5em 0 .7em">A demo exercises the happy path exactly once.</h2>
       <p>Both traps share a signature: a component that is <strong>structurally present and functionally empty</strong>, failing toward a value that looks legitimate. Empty history reads as forgetfulness. A dropped tool call reads as a model decision. Neither throws. Neither pages anyone. And a demo — one clean turn, one well-formed call — never lands on the input that reveals the hole. The gap between "wired" and "works" is exactly the set of inputs your demo didn't try.</p>
@@ -353,26 +424,33 @@
     <div class="table-region col" style="max-width:none">
       <p class="eyebrow">If you'd rather not hand-build it</p>
       <h3 style="margin:.5em 0 .3em">Small-model harness &amp; memory libraries</h3>
-      <p class="col" style="margin-bottom:0">Where a self-built harness keeps drifting into these traps, a maintained library has usually already paid for the boundary handling. Rough positioning for a <code>7B–14B</code> + tool-call + memory stack. Stars as of Aug 2026.</p>
+      <p class="col" style="margin-bottom:0">Where a self-built harness keeps drifting into these traps, a maintained library — or the protocol beneath it — has usually already paid for the boundary handling. Rough positioning for a <code>7B–14B</code> + tool-call + memory stack. Stars as of Aug 2026; a few once-central projects have visibly stalled, and one contract has become the default everyone else builds on.</p>
       <div class="scroll" style="margin-top:1.4em">
         <table>
           <thead>
             <tr><th scope="col">Project</th><th scope="col">Stars</th><th scope="col">What it is</th><th scope="col">Memory model</th><th scope="col">Reach for it when</th></tr>
           </thead>
           <tbody>
+            <tr class="row-std">
+              <th scope="row">MCP <span class="tag std">the standard</span></th>
+              <td><span class="num">89.8k</span></td>
+              <td class="row-note">Not a harness — the <em>protocol</em> for the model↔tool boundary (spec rev <code>2025-11-25</code>). Servers repo 89.8k, Python SDK 24.1k.</td>
+              <td class="row-note">n/a (transport, not memory)</td>
+              <td class="row-note"><span class="tag pick">do this instead</span> The direct answer to Trap 02. Speak the contract; stop parsing prose.</td>
+            </tr>
             <tr>
               <th scope="row">LangGraph</th>
               <td><span class="num">40.2k</span></td>
               <td class="row-note">Graph runtime for agent control flow; <code>create_react_agent</code> over any OpenAI-compatible endpoint.</td>
               <td class="row-note">Checkpointer (short-term) + store (long-term, Postgres-backed).</td>
-              <td class="row-note"><span class="tag pick">production</span> Strongest control &amp; state boundaries. Serious deployments.</td>
+              <td class="row-note"><span class="tag pick">production</span> Strongest control &amp; state boundaries; durable execution. Serious deployments.</td>
             </tr>
             <tr>
-              <th scope="row">Qwen-Agent</th>
+              <th scope="row">Qwen-Agent <span class="tag stale">stalled ~6mo</span></th>
               <td><span class="num">17.0k</span></td>
               <td class="row-note">Alibaba's harness with native Qwen function-call templates; points at vLLM.</td>
               <td class="row-note">History accumulation + automatic file RAG.</td>
-              <td class="row-note"><span class="tag pick">fastest fit</span> Your model stack is Qwen. Least glue code.</td>
+              <td class="row-note"><span class="tag pick">fastest fit</span> Your model stack is Qwen. Least glue code — if you can live with a slow release cadence.</td>
             </tr>
             <tr>
               <th scope="row">Letta <span class="tag">ex-MemGPT</span></th>
@@ -396,14 +474,14 @@
               <td class="row-note"><span class="tag">component</span> You keep your harness but Trap 01 keeps biting.</td>
             </tr>
             <tr>
-              <th scope="row">gorilla / BFCL</th>
+              <th scope="row">gorilla / BFCL <span class="tag stale">stalled ~4mo</span></th>
               <td><span class="num">13.0k</span></td>
               <td class="row-note">Training + evaluation for function calling, not a runtime.</td>
               <td class="row-note">n/a</td>
               <td class="row-note"><span class="tag">eval</span> Picking <em>which</em> small model calls tools well (BFCL leaderboard).</td>
             </tr>
             <tr>
-              <th scope="row">AutoGen</th>
+              <th scope="row">AutoGen <span class="tag stale">stalled ~4mo</span></th>
               <td><span class="num">60.6k</span></td>
               <td class="row-note">Multi-agent framework — now in maintenance mode.</td>
               <td class="row-note">Conversational history.</td>
@@ -415,6 +493,13 @@
               <td class="row-note">Rewritten into a Rust coding CLI agent; no longer a general harness.</td>
               <td class="row-note">Session-scoped.</td>
               <td class="row-note"><span class="tag warn">repurposed</span> Want the CLI tool, not a library to build on.</td>
+            </tr>
+            <tr>
+              <th scope="row">Pydantic AI <span class="tag">newer</span></th>
+              <td><span class="num">19.4k</span></td>
+              <td class="row-note">Tool calls validated against typed schemas end-to-end; a parse either conforms or raises.</td>
+              <td class="row-note">Message history; pluggable.</td>
+              <td class="row-note"><span class="tag pick">type-safe</span> If Trap 02 scared you: the schema <em>is</em> the contract, checked at the boundary.</td>
             </tr>
           </tbody>
         </table>
